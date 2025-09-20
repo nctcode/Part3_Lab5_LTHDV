@@ -61,7 +61,7 @@
 
 ```bash
 # Clone repo
-git clone <repository_url>
+git clone https://github.com/nctcode/Part3_Lab5_LTHDV.git
 cd supplier-product-app
 
 # Install dependencies
