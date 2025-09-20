@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Supplier Product App</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <header>
+        <a href="/">Home</a> |
+        <a href="/products">Products</a> |
+        <a href="/suppliers">Suppliers</a> |
+        <% if (!locals.userId) { %>
+            <a href="/auth/login">Login</a> |
+            <a href="/auth/register">Register</a>
+            <% } else { %>
+                <a href="/auth/logout">Logout</a>
+                <% } %>
+                    <hr>
+    </header>
+    <main>
+        <!-- Nội dung từng page sẽ được include trực tiếp -->
+        <%- typeof content !== 'undefined' ? content : '' %>
+    </main>
+</body>
+
+</html>
