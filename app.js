@@ -3,8 +3,9 @@ const express = require('express');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
-const bodyParser = require('body-parser');
 const path = require('path');
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./config/swagger');
 
 const app = express();
 
@@ -20,12 +21,16 @@ mongoose.connect(mongoUrl)
 // ========================
 // Middleware
 // ========================
-app.use(bodyParser.urlencoded({ extended: false }));
+// Parse JSON bodies (for API)
+app.use(express.json());
+// Parse URL-encoded bodies (for form submissions)
+app.use(express.urlencoded({ extended: true }));
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
 
 // ========================
-// Session
+// Session + cookie
 // ========================
 app.use(session({
     secret: process.env.SESSION_SECRET || 'mysecret',
@@ -36,20 +41,24 @@ app.use(session({
 }));
 
 // ========================
-// Make userId available in EJS templates
+// Make userId & username available in all EJS templates
 // ========================
 app.use((req, res, next) => {
     res.locals.userId = req.session.userId || null;
+    res.locals.username = req.session.username || null;
     next();
 });
 
 // ========================
 // Routes
 // ========================
-app.use('/', require('./routes/index')); // Trang chủ
-app.use('/auth', require('./routes/auth')); // Đăng nhập / đăng ký / quên mật khẩu
-app.use('/suppliers', require('./routes/suppliers')); // CRUD nhà cung cấp
-app.use('/products', require('./routes/products')); // CRUD sản phẩm
+app.use('/', require('./routes/index')); // Trang chủ + filter/search
+app.use('/auth', require('./routes/auth')); // Đăng nhập / đăng ký / quên mật khẩu / logout
+app.use('/suppliers', require('./routes/suppliers')); // CRUD nhà cung cấp (admin)
+app.use('/products', require('./routes/products')); // CRUD sản phẩm (admin)
+
+// Swagger API docs
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // ========================
 // Start server

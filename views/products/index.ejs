@@ -1,21 +1,21 @@
 <%- include('../partials/header') %>
 
-    <h2 class="mb-3">Products</h2>
-    <a href="/products/create" class="btn btn-success mb-3">Add Product</a>
+    <h2>Products</h2>
+    <a href="/products/add" class="btn btn-success mb-2">Add Product</a>
 
-    <table class="table table-striped table-bordered">
-        <thead class="table-dark">
+    <table class="table table-bordered">
+        <thead>
             <tr>
                 <th>Name</th>
                 <th>Price</th>
                 <th>Quantity</th>
                 <th>Supplier</th>
-                <th>Action</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
             <% products.forEach(p => { %>
-                <tr>
+                <tr id="row-<%= p._id %>">
                     <td>
                         <%= p.name %>
                     </td>
@@ -26,15 +26,32 @@
                         <%= p.quantity %>
                     </td>
                     <td>
-                        <%= p.supplier ? p.supplier.name : 'No supplier' %>
+                        <%= p.supplier ? p.supplier.name : 'N/A' %>
                     </td>
                     <td>
                         <a href="/products/edit/<%= p._id %>" class="btn btn-primary btn-sm">Edit</a>
-                        <a href="/products/delete/<%= p._id %>" class="btn btn-danger btn-sm">Delete</a>
+                        <button class="btn btn-danger btn-sm" onclick="deleteProduct('<%= p._id %>')">Delete</button>
                     </td>
                 </tr>
                 <% }) %>
         </tbody>
     </table>
+
+    <script>
+        function deleteProduct(id) {
+            if (confirm('Are you sure you want to delete this product?')) {
+                fetch('/products/' + id, {
+                        method: 'DELETE'
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        alert(data.message);
+                        document.getElementById('row-' + id).remove();
+                    })
+                    .catch(err => console.error(err));
+            }
+        }
+    </script>
+
 
     <%- include('../partials/footer') %>

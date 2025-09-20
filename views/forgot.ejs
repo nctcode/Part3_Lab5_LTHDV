@@ -1,12 +1,16 @@
 <%- include('partials/header') %>
-
-    <h2 class="mb-3">Forgot Password</h2>
-    <form method="POST" class="w-50 mx-auto">
-        <div class="mb-3">
-            <label class="form-label">Email</label>
-            <input type="email" name="email" class="form-control" required>
+    <h2>Forgot Password</h2>
+    <% if (message) { %>
+        <div class="alert alert-info">
+            <%= message %>
         </div>
-        <button class="btn btn-warning">Reset Password</button>
-    </form>
+        <% } %>
 
-    <%- include('partials/footer') %>
+            <form method="POST" class="w-50 mx-auto">
+                <div class="mb-3">
+                    <label>Email</label>
+                    <input type="email" name="email" class="form-control" required>
+                </div>
+                <button class="btn btn-warning">Reset Password</button>
+            </form>
+            <%- include('partials/footer') %>
