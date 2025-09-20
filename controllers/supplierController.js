@@ -27,6 +27,13 @@ exports.update = async(req, res) => {
 };
 
 exports.delete = async(req, res) => {
+    // Prevent deleting supplier if referenced by products
+    const Product = require('../models/Product');
+    const productCount = await Product.countDocuments({ supplier: req.params.id });
+    if (productCount > 0) {
+        const suppliers = await Supplier.find();
+        return res.render('suppliers/index', { suppliers, error: 'Cannot delete supplier: It is referenced by products.' });
+    }
     await Supplier.findByIdAndDelete(req.params.id);
     res.redirect('/suppliers');
 };

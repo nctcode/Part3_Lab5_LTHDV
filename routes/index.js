@@ -5,13 +5,28 @@ const Supplier = require('../models/Supplier');
 
 router.get('/', async(req, res) => {
     const suppliers = await Supplier.find();
-    let products = await Product.find().populate('supplier');
+    const products = await Product.find().populate('supplier');
 
-    const { supplierId, search } = req.query;
-    if (supplierId) products = products.filter(p => p.supplier._id.toString() === supplierId);
-    if (search) products = products.filter(p => p.name.toLowerCase().includes(search.toLowerCase()));
+    const selectedSupplier = req.query.supplierId || ''; // query param từ form
+    const searchQuery = req.query.search || '';
 
-    res.render('index', { products, suppliers });
+    let filteredProducts = products;
+
+    if (selectedSupplier) {
+        filteredProducts = filteredProducts.filter(p => p.supplier && p.supplier._id.toString() === selectedSupplier);
+    }
+
+    if (searchQuery) {
+        filteredProducts = filteredProducts.filter(p => p.name.toLowerCase().includes(searchQuery.toLowerCase()));
+    }
+
+    res.render('index', {
+        products: filteredProducts,
+        suppliers,
+        selectedSupplier,
+        searchQuery
+    });
 });
+
 
 module.exports = router;

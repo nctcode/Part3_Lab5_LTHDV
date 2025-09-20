@@ -1,38 +1,43 @@
 <%- include('../partials/header') %>
 
     <h2 class="mb-3">Suppliers</h2>
-    <a href="/suppliers/create" class="btn btn-success mb-3">Add Supplier</a>
+    <% if (typeof error !== 'undefined' && error) { %>
+        <div class="alert alert-danger">
+            <%= error %>
+        </div>
+        <% } %>
+            <a href="/suppliers/create" class="btn btn-success mb-3">Add Supplier</a>
 
-    <div class="table-responsive">
-        <table class="table table-striped table-bordered">
-            <thead class="table-dark">
-                <tr>
-                    <th>Name</th>
-                    <th>Address</th>
-                    <th>Phone</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% suppliers.forEach(s => { %>
-                    <tr>
-                        <td>
-                            <%= s.name %>
-                        </td>
-                        <td>
-                            <%= s.address || '-' %>
-                        </td>
-                        <td>
-                            <%= s.phone || '-' %>
-                        </td>
-                        <td>
-                            <a href="/suppliers/edit/<%= s._id %>" class="btn btn-primary btn-sm">Edit</a>
-                            <a href="/suppliers/delete/<%= s._id %>" class="btn btn-danger btn-sm">Delete</a>
-                        </td>
-                    </tr>
-                    <% }) %>
-            </tbody>
-        </table>
-    </div>
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Name</th>
+                            <th>Address</th>
+                            <th>Phone</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% suppliers.forEach(s => { %>
+                            <tr>
+                                <td>
+                                    <%= s.name %>
+                                </td>
+                                <td>
+                                    <%= s.address || '-' %>
+                                </td>
+                                <td>
+                                    <%= s.phone || '-' %>
+                                </td>
+                                <td>
+                                    <a href="/suppliers/edit/<%= s._id %>" class="btn btn-primary btn-sm">Edit</a>
+                                    <a href="/suppliers/delete/<%= s._id %>" class="btn btn-danger btn-sm">Delete</a>
+                                </td>
+                            </tr>
+                            <% }) %>
+                    </tbody>
+                </table>
+            </div>
 
-    <%- include('../partials/footer') %>
+            <%- include('../partials/footer') %>

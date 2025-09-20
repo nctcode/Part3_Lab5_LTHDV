@@ -5,11 +5,11 @@
     <form method="GET" class="row g-2 mb-4">
         <div class="col-auto">
             <select name="supplierId" class="form-select">
-      <option value="">All Suppliers</option>
-      <% suppliers.forEach(s => { %>
-        <option value="<%= s._id %>" <%= selectedSupplier == s._id ? 'selected' : '' %>><%= s.name %></option>
-      <% }) %>
-    </select>
+                <option value="">All Suppliers</option>
+                <% (suppliers || []).forEach(s => { %>
+                    <option value="<%= s._id %>" <%= (selectedSupplier == s._id ? 'selected' : '') %>><%= s.name %></option>
+                <% }) %>
+            </select>
         </div>
         <div class="col-auto">
             <input type="text" name="search" class="form-control" placeholder="Search name" value="<%= searchQuery || '' %>">
@@ -42,7 +42,7 @@
                             <%= p.quantity %>
                         </td>
                         <td>
-                            <%= p.supplier ? p.supplier.name : 'No supplier' %>
+                            <%= p.supplier && p.supplier.name ? p.supplier.name : 'No supplier' %>
                         </td>
                     </tr>
                     <% }) %>
